@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+  postgres:
+    image: postgres:13.1
+    ports:
+      - 5432:5432
+    expose: 
+      - 5432
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=pass
+      - POSTGRES_DB=mydb
+    volumes:
+      - type: bind
+        source: $HOME/Desktop/PostreSQL-Snippets/school.sql
+        target: /data/school.sql
+  adminer:
+    image: adminer
+    restart: always
+    ports:
+      - 8080:8080
