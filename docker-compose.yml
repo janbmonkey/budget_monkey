@@ -25,7 +25,8 @@ services:
     tty: true
     restart: always
     environment: 
-      SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/test_db
+      # SPRING_DATASOURCE_URL: jdbc:mysql://db:3306/test_db
+      SPRING_DATASOURCE_URL: jdbc:postgresql://db:5435/test_db
       SPRING_DATASOURCE_USERNAME: dbuser
       SPRING_DATASOURCE_PASSWORD: userpass
     depends_on: 
@@ -34,39 +35,41 @@ services:
       - frontend
       - backend
 
-
-  # db:
-  #   image: postgres:13.1
-  #   ports:
-  #     - 5432:5432
-  #   expose: 
-  #     - 5432
-  #   environment:
-  #     - POSTGRES_USER=postgres
-  #     - POSTGRES_PASSWORD=pass
-  #     - POSTGRES_DB=mydb
-  #   volumes:
-  #     - type: bind
-  #       source: C:/Projects/Spielwiese/BMonkey/db/postgres
-  #       target: /var/lib/postgres
-
   db:
-    image: mysql
+    image: postgres:13.1
     container_name: monkeydb
-    restart: always
-    ports:
-      - "3305:3306"
-    networks:
-      - backend
     environment:
-      MYSQL_DATABASE: test_db
-      MYSQL_USER: dbuser
-      MYSQL_PASSWORD: userpass
-      MYSQL_ROOT_PASSWORD: root
+      POSTGRES_DB: test_db
+      POSTGRES_USER: dbuser
+      POSTGRES_PASSWORD: userpass
+      PGPORT: 5435
+    ports:
+      - "5432:5435"
     volumes:
       - type: bind
-        source: C:/Projects/Spielwiese/BMonkey/db/mysql
-        target: /var/lib/mysql
+        source: C:/Projects/Spielwiese/BMonkey/db/postgres
+        target: /var/lib/postgresql/data
+    networks:
+      - backend
+
+  # db:
+  #   image: mysql
+  #   container_name: monkeydb
+  #   restart: always
+  #   environment:
+  #     MYSQL_DATABASE: test_db
+  #     MYSQL_USER: dbuser
+  #     MYSQL_PASSWORD: userpass
+  #     MYSQL_ROOT_PASSWORD: root
+  #     MYSQL_TCP_PORT: 3306
+  #   ports:
+  #     - "3305:3306"
+  #   volumes:
+  #     - type: bind
+  #       source: C:/Projects/Spielwiese/BMonkey/db/mysql
+  #       target: /var/lib/mysql
+  #   networks:
+  #     - backend
 
 networks:
   backend:
