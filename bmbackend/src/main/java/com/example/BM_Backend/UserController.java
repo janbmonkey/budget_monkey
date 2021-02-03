@@ -37,7 +37,7 @@ public class UserController {
     @PostMapping(value = "/user")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    long putUser(@RequestBody UserDto userDto){
+    long postUser(@RequestBody UserDto userDto){
         UserEntity userEntity = this.convertToEntity(userDto);
         System.out.println(userEntity);
         return userService.setUser(userEntity);

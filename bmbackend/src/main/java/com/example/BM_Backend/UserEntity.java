@@ -1,10 +1,9 @@
 package com.example.BM_Backend;
 
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
-
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name="USER_ENTITY")
@@ -20,4 +19,7 @@ public class UserEntity {
 
     @Column(name="EMAIL", length=50, nullable=false, unique=false)
     private String email;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "buyer", cascade = CascadeType.PERSIST)
+    private List<ItemEntity> itemList = new ArrayList<>();
 }

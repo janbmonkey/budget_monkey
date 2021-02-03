@@ -5,10 +5,10 @@ import UserListComponent from './UserListComponent';
 function UserSection() {
   return (
     <>
-      <UserListComponent/>
-      <UserFormComponent/>
+      <UserListComponent />
+      <UserFormComponent />
     </>
   );
-};
+}
 
 export default UserSection;

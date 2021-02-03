@@ -13,9 +13,7 @@ public class UserService {
     @Autowired
     private UserRepository userRepository;
 
-    UserService(){
-        System.out.println("Ctor UserService");
-    }
+    UserService(){}
 
     @Transactional
     public Optional<UserEntity> getUser(long id) {

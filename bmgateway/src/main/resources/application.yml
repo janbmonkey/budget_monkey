@@ -1,0 +1,12 @@
+server:
+  port: 9090
+---
+spring:
+  cloud:
+    gateway:
+      routes:
+        - id: my-first-route
+          uri: https://httpbin.org/get
+          predicates:
+            - Path=/get
+            - Header=AwesomePassword, soso1

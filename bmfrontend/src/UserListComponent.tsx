@@ -4,22 +4,23 @@ import { UserModel } from './UserModel';
 import { getAllUsers } from './UserService';
 
 function UserListComponent() {
-  
   const [userList, setUserList] = useState<UserModel[]>();
-  
-  useEffect( () => {
+
+  useEffect(() => {
     const fetchData = async () => {
       const users = await getAllUsers();
       setUserList(users);
-    }
+    };
     fetchData();
   }, [userList]);
 
   return (
     <div>
-      { userList?.map( user => <UserItem user={user}/>) }
+      {userList?.map((user) => (
+        <UserItem user={user} />
+      ))}
     </div>
   );
-};
+}
 
 export default UserListComponent;
