@@ -1,0 +1,18 @@
+/* The animation code */
+@keyframes rotation {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(359deg);
+  }
+}
+
+/* The element to apply the animation to */
+.my-animation {
+  animation-delay: 1.5s;
+  animation-name: rotation;
+  animation-duration: 1.4s;
+  animation-iteration-count: 1;
+  animation-timing-function: ease-in-out;
+}
