@@ -8,16 +8,17 @@ import {
   InputGroup,
 } from 'react-bootstrap';
 import { useRecoilState, useRecoilValue } from 'recoil';
+import { IItemType, IUserType } from '../App.types';
+import * as Icon from 'react-bootstrap-icons';
+import { postUsers } from '../UserService';
+import './ItemEntryScreen.css';
 import {
   rsDefaultCurrency,
   rsCurrencyList,
   rsCurrentUserId,
   rsUserList,
-} from './App.recoil';
-import { IItemType, IUserType } from './App.types';
-import * as Icon from 'react-bootstrap-icons';
-import { postUsers } from './UserService';
-import './ItemEntryScreen.css';
+} from '../App.recoil';
+import { UserSelectDropdown } from './UserSelectDropdown';
 
 export const ItemEntryScreen: FC = (props) => {
   const defaultCurrency = useRecoilValue(rsDefaultCurrency);
@@ -63,49 +64,16 @@ export const ItemEntryScreen: FC = (props) => {
     [currencyList]
   );
 
-  const onSelectUser = useCallback(
-    (selectedUserId) => {
-      if (selectedUserId) {
-        const selectedUser = userList[selectedUserId];
-        if (selectedUser?.id && selectedUser?.name)
-          setItem((prev) => ({ ...prev, buyer: selectedUser }));
-      }
-    },
-    [userList]
-  );
-
-  const [newUser, setNewUser] = useState<IUserType>({
-    name: '',
-    email: '',
-  } as IUserType);
-
-  const onChangeNewUserInput = useCallback(
-    (event) => {
-      const { name, value } = event?.target;
-      if (name && Object.keys(newUser).includes(name))
-        setNewUser((prev) => ({ ...prev, [name]: value }));
-    },
-    [newUser]
-  );
+  const onSelectUser = useCallback((selectedUser) => {
+    if (selectedUser?.id && selectedUser?.name)
+      setItem((prev) => ({ ...prev, buyer: selectedUser }));
+  }, []);
 
   // Set Focus
   const itemClassRef = useRef<HTMLInputElement>(null);
   useEffect(() => {
     itemClassRef.current?.focus();
   }, []);
-
-  const onCreateNewUser = useCallback(() => {
-    console.log('newUser', newUser);
-    if (newUser.name) {
-      const putData = async () => await postUsers(newUser);
-      const newId = putData();
-      setNewUser({ name: '', email: '' } as IUserType);
-      newId.then((id) => {
-        const pushedUser = { ...newUser, id };
-        setUserList((prev) => ({ ...prev, [id]: pushedUser }));
-      });
-    }
-  }, [newUser, setUserList]);
 
   return (
     <div>
@@ -177,7 +145,13 @@ export const ItemEntryScreen: FC = (props) => {
 
           <InputGroup>
             <InputGroup.Text>Buyer</InputGroup.Text>
-            <DropdownButton
+
+            <UserSelectDropdown
+              activeUser={item.buyer}
+              onSelectUser={onSelectUser}
+            />
+
+            {/* <DropdownButton
               title={item.buyer ? item.buyer.name : 'Who bought it?'}
               id="dropdown-user"
               onSelect={onSelectUser}
@@ -196,7 +170,6 @@ export const ItemEntryScreen: FC = (props) => {
                   </Dropdown.Item>
                 ))}
               <Dropdown.Divider> New User </Dropdown.Divider>
-              {/* Add new User */}
               <div className="d-flex justify-content-between">
                 <InputGroup className="input-group-sm">
                   <FormControl
@@ -225,6 +198,7 @@ export const ItemEntryScreen: FC = (props) => {
                 </Button>
               </div>
             </DropdownButton>
+          */}
           </InputGroup>
         </div>
         <Button className="btn-lg">

@@ -1,5 +1,5 @@
 import React from 'react';
-import { ItemEntryScreen } from './ItemEntryScreen';
+import { ItemEntryScreen } from './ItemEntryScreen/ItemEntryScreen';
 import './App.css';
 import { RecoilRoot } from 'recoil';
 import { Init } from './Init';
