@@ -4,8 +4,11 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
+import java.util.Map;
+import java.util.MissingResourceException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -20,7 +23,7 @@ public class UserController {
 
     @GetMapping(value = "/user/{id}")
     @ResponseBody
-    UserDto getUser(@PathVariable("id") long id) {
+    public UserDto getUser(@PathVariable("id") long id) {
         Optional<UserEntity> userEntityOptional = userService.getUser(id);
         UserDto userDto = userEntityOptional.map(userEntity -> this.convertToDto(userEntity)).orElse(new UserDto());
         return userDto;
@@ -28,7 +31,7 @@ public class UserController {
 
     @GetMapping(value = "/user")
     @ResponseBody
-    List<UserDto> getAllUsers() {
+    public List<UserDto> getAllUsers() {
         List<UserEntity> userEntities = userService.getAllUsers();
         List<UserDto> userDtos = userEntities.stream().map((user) -> this.convertToDto(user)).collect(Collectors.toList());
         return userDtos;
@@ -37,10 +40,17 @@ public class UserController {
     @PostMapping(value = "/user")
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
-    long postUser(@RequestBody UserDto userDto){
+    public long postUser(@RequestBody UserDto userDto){
         UserEntity userEntity = this.convertToEntity(userDto);
         System.out.println(userEntity);
         return userService.setUser(userEntity);
+    }
+
+    @DeleteMapping(value ="/user/{id}")
+    @ResponseBody
+    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId)
+    throws ResourceAccessException {
+        return userService.deleteUser(userId);
     }
 
     private UserDto convertToDto(UserEntity userEntity){

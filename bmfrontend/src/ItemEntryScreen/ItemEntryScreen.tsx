@@ -7,10 +7,9 @@ import {
   FormControl,
   InputGroup,
 } from 'react-bootstrap';
-import { useRecoilState, useRecoilValue } from 'recoil';
-import { IItemType, IUserType } from '../App.types';
+import { useRecoilValue } from 'recoil';
+import { IItemType } from '../App.types';
 import * as Icon from 'react-bootstrap-icons';
-import { postUsers } from '../UserService';
 import './ItemEntryScreen.css';
 import {
   rsDefaultCurrency,
@@ -24,13 +23,20 @@ export const ItemEntryScreen: FC = (props) => {
   const defaultCurrency = useRecoilValue(rsDefaultCurrency);
   const currencyList = useRecoilValue(rsCurrencyList);
   const currentUserId = useRecoilValue(rsCurrentUserId);
-  const [userList, setUserList] = useRecoilState(rsUserList);
+  const userList = useRecoilValue(rsUserList);
   const [item, setItem] = useState<IItemType>({
     itemClass: '',
     currency: defaultCurrency,
     quantity: 1,
     buyer: userList[currentUserId],
   } as IItemType);
+  const current = new Date();
+  const [date, setDate] = useState(
+    `${current.getFullYear()}-${String(current.getMonth()).padStart(
+      2,
+      '0'
+    )}-${String(current.getDate()).padStart(2, '0')}`
+  );
 
   useEffect(() => {
     setItem((prev) => ({
@@ -132,7 +138,9 @@ export const ItemEntryScreen: FC = (props) => {
               onChange={onChangeItemEntryInput}
             />
             <InputGroup.Append>
-              <InputGroup.Text>x</InputGroup.Text>
+              <InputGroup.Text>
+                <Icon.Collection />
+              </InputGroup.Text>
             </InputGroup.Append>
           </InputGroup>
 
@@ -140,65 +148,24 @@ export const ItemEntryScreen: FC = (props) => {
             <InputGroup.Prepend>
               <InputGroup.Text>Date</InputGroup.Text>
             </InputGroup.Prepend>
-            <FormControl type="date" name="dob" placeholder="Date" />
+            <FormControl
+              type="date"
+              name="dob"
+              placeholder="Date"
+              value={date}
+              onChange={(event) => {
+                console.log(event.target.value);
+                setDate(event.target.value);
+              }}
+            />
           </InputGroup>
 
           <InputGroup>
             <InputGroup.Text>Buyer</InputGroup.Text>
-
             <UserSelectDropdown
               activeUser={item.buyer}
               onSelectUser={onSelectUser}
             />
-
-            {/* <DropdownButton
-              title={item.buyer ? item.buyer.name : 'Who bought it?'}
-              id="dropdown-user"
-              onSelect={onSelectUser}
-            >
-              {Object.values(userList)
-                .filter((user) => user)
-                .map((user) => (
-                  <Dropdown.Item
-                    className="d-flex justify-content-between"
-                    key={user.id}
-                    eventKey={String(user.id)}
-                    active={user.id === item.buyer?.id ? true : false}
-                  >
-                    <div>{user.name}</div>
-                    <div className="text-muted">{user.email}</div>
-                  </Dropdown.Item>
-                ))}
-              <Dropdown.Divider> New User </Dropdown.Divider>
-              <div className="d-flex justify-content-between">
-                <InputGroup className="input-group-sm">
-                  <FormControl
-                    name="name"
-                    type="text"
-                    placeholder="Name"
-                    value={newUser.name}
-                    onChange={onChangeNewUserInput}
-                    onKeyPress={(
-                      event: React.KeyboardEvent<HTMLInputElement>
-                    ) => event.key === 'Enter' && onCreateNewUser()}
-                  />
-                  <FormControl
-                    name="email"
-                    type="email"
-                    placeholder="Email"
-                    value={newUser.email}
-                    onChange={onChangeNewUserInput}
-                    onKeyPress={(
-                      event: React.KeyboardEvent<HTMLInputElement>
-                    ) => event.key === 'Enter' && onCreateNewUser()}
-                  />
-                </InputGroup>
-                <Button className="btn-sm" onClick={onCreateNewUser}>
-                  <Icon.PersonPlusFill />
-                </Button>
-              </div>
-            </DropdownButton>
-          */}
           </InputGroup>
         </div>
         <Button className="btn-lg">

@@ -2,10 +2,10 @@ package com.example.BM_Backend;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.ResourceAccessException;
 
 import javax.transaction.Transactional;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Service
 public class UserService {
@@ -29,5 +29,15 @@ public class UserService {
     public long setUser(UserEntity userEntity){
         userRepository.save(userEntity);
         return userEntity.getId();
+    }
+
+    @Transactional
+    public Map<String, Boolean> deleteUser(long id){
+        UserEntity userEntity = userRepository.findById(id)
+                .orElseThrow(()-> new ResourceAccessException("User not found "+ id));
+        userRepository.delete(userEntity);
+        Map<String, Boolean> response = new HashMap<>();
+        response.put("deleted", Boolean.TRUE);
+        return response;
     }
 }

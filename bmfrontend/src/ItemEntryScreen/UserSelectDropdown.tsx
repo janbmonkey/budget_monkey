@@ -9,8 +9,9 @@ import {
 import { useRecoilState } from 'recoil';
 import { rsUserList } from '../App.recoil';
 import { IUserType } from '../App.types';
-import { postUsers } from '../UserService';
+import { postUser } from '../UserService';
 import * as Icon from 'react-bootstrap-icons';
+import { UserSelectListItem } from './UserSelectListItem';
 
 export interface IUserSelectDropdownProps {
   activeUser: IUserType;
@@ -47,7 +48,7 @@ export const UserSelectDropdown: FC<IUserSelectDropdownProps> = (props) => {
   const onCreateNewUser = useCallback(() => {
     console.log('newUser', newUser);
     if (newUser.name) {
-      const putData = async () => await postUsers(newUser);
+      const putData = async () => await postUser(newUser);
       const newId = putData();
       setNewUser({ name: '', email: '' } as IUserType);
       newId.then((id) => {
@@ -65,15 +66,11 @@ export const UserSelectDropdown: FC<IUserSelectDropdownProps> = (props) => {
       {Object.values(userList)
         .filter((user) => user)
         .map((user) => (
-          <Dropdown.Item
-            className="d-flex justify-content-between"
+          <UserSelectListItem
             key={user.id}
-            eventKey={String(user.id)}
-            active={user.id === activeUser?.id ? true : false}
-          >
-            <div>{user.name}</div>
-            <div className="text-muted">{user.email}</div>
-          </Dropdown.Item>
+            user={user}
+            isActive={user.id === activeUser?.id ? true : false}
+          />
         ))}
       <Dropdown.Divider> New User </Dropdown.Divider>
       {/* Add new User */}
