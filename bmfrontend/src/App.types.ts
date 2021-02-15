@@ -1,5 +1,7 @@
+import { DateTime } from 'luxon';
+
 export interface IUserType {
-  id: string;
+  id: number;
   name: string;
   email: string;
 }
@@ -10,5 +12,6 @@ export interface IItemType {
   price: number;
   currency: string;
   quantity: number;
+  date: DateTime;
   buyer: IUserType;
 }

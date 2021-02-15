@@ -3,7 +3,7 @@ import { CloseButton, Dropdown } from 'react-bootstrap';
 import { useSetRecoilState } from 'recoil';
 import { rsUserList } from '../App.recoil';
 import { IUserType } from '../App.types';
-import { deleteUser } from '../UserService';
+import { deleteUser } from '../Services/UserService';
 
 export interface IUserSelectListItemProps {
   user: IUserType;

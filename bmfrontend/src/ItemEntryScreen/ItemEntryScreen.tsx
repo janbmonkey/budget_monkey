@@ -18,25 +18,23 @@ import {
   rsUserList,
 } from '../App.recoil';
 import { UserSelectDropdown } from './UserSelectDropdown';
+import { DateTime } from 'luxon';
+import { postItem } from '../Services/ItemService';
 
-export const ItemEntryScreen: FC = (props) => {
+export const ItemEntryScreen: FC = () => {
   const defaultCurrency = useRecoilValue(rsDefaultCurrency);
   const currencyList = useRecoilValue(rsCurrencyList);
   const currentUserId = useRecoilValue(rsCurrentUserId);
   const userList = useRecoilValue(rsUserList);
+
   const [item, setItem] = useState<IItemType>({
     itemClass: '',
+    price: {},
     currency: defaultCurrency,
     quantity: 1,
+    date: DateTime.local(),
     buyer: userList[currentUserId],
   } as IItemType);
-  const current = new Date();
-  const [date, setDate] = useState(
-    `${current.getFullYear()}-${String(current.getMonth()).padStart(
-      2,
-      '0'
-    )}-${String(current.getDate()).padStart(2, '0')}`
-  );
 
   useEffect(() => {
     setItem((prev) => ({
@@ -48,16 +46,15 @@ export const ItemEntryScreen: FC = (props) => {
     }));
   }, [defaultCurrency, currentUserId, userList]);
 
-  const onChangeItemEntryInput = useCallback(
+  const handleItemEntryInputChange = useCallback(
     (event) => {
-      console.log('event', event);
-
       const { name, value } = event?.target;
-      if (name && Object.keys(item).includes(name))
+      if (name && Object.keys(item).includes(name)) {
         setItem((prev: IItemType) => ({
           ...prev,
-          [name]: value,
+          [name]: name === 'date' ? DateTime.fromISO(value) : value,
         }));
+      }
     },
     [item]
   );
@@ -70,10 +67,27 @@ export const ItemEntryScreen: FC = (props) => {
     [currencyList]
   );
 
-  const onSelectUser = useCallback((selectedUser) => {
+  const handleUserSelected = useCallback((selectedUser) => {
     if (selectedUser?.id && selectedUser?.name)
       setItem((prev) => ({ ...prev, buyer: selectedUser }));
   }, []);
+
+  const handleSubmit = useCallback(
+    (event) => {
+      const doPostItem = async () => await postItem(item);
+      doPostItem().then((response) => console.log('submited', response));
+      setItem({
+        itemClass: '',
+        price: {},
+        currency: defaultCurrency,
+        quantity: 1,
+        date: DateTime.local(),
+        buyer: userList[currentUserId],
+      } as IItemType);
+      event.stopPropagation();
+    },
+    [currentUserId, defaultCurrency, item, userList]
+  );
 
   // Set Focus
   const itemClassRef = useRef<HTMLInputElement>(null);
@@ -89,7 +103,7 @@ export const ItemEntryScreen: FC = (props) => {
         stuff
       </h1>
 
-      <Form onSubmit={(event) => event.stopPropagation()}>
+      <Form onSubmit={handleSubmit}>
         <Form.Group>
           <Form.Control
             name="itemClass"
@@ -97,7 +111,7 @@ export const ItemEntryScreen: FC = (props) => {
             ref={itemClassRef}
             placeholder="What did you get?"
             value={item.itemClass}
-            onChange={onChangeItemEntryInput}
+            onChange={handleItemEntryInputChange}
           />
         </Form.Group>
         <InputGroup>
@@ -107,7 +121,7 @@ export const ItemEntryScreen: FC = (props) => {
             type="number"
             placeholder="How much?"
             value={item.price}
-            onChange={onChangeItemEntryInput}
+            onChange={handleItemEntryInputChange}
           />
           <DropdownButton
             as={InputGroup.Append}
@@ -135,7 +149,7 @@ export const ItemEntryScreen: FC = (props) => {
               type="number"
               prefix="asfdf"
               value={item.quantity}
-              onChange={onChangeItemEntryInput}
+              onChange={handleItemEntryInputChange}
             />
             <InputGroup.Append>
               <InputGroup.Text>
@@ -150,13 +164,10 @@ export const ItemEntryScreen: FC = (props) => {
             </InputGroup.Prepend>
             <FormControl
               type="date"
-              name="dob"
+              name="date"
               placeholder="Date"
-              value={date}
-              onChange={(event) => {
-                console.log(event.target.value);
-                setDate(event.target.value);
-              }}
+              value={item.date.toISODate()}
+              onChange={handleItemEntryInputChange}
             />
           </InputGroup>
 
@@ -164,11 +175,11 @@ export const ItemEntryScreen: FC = (props) => {
             <InputGroup.Text>Buyer</InputGroup.Text>
             <UserSelectDropdown
               activeUser={item.buyer}
-              onSelectUser={onSelectUser}
+              onSelectUser={handleUserSelected}
             />
           </InputGroup>
         </div>
-        <Button className="btn-lg">
+        <Button className="btn-lg" onClick={handleSubmit}>
           <Icon.CheckCircle />
         </Button>
       </Form>

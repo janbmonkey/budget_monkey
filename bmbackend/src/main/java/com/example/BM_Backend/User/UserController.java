@@ -1,4 +1,4 @@
-package com.example.BM_Backend;
+package com.example.BM_Backend.User;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +8,6 @@ import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
 import java.util.Map;
-import java.util.MissingResourceException;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -48,7 +47,7 @@ public class UserController {
 
     @DeleteMapping(value ="/user/{id}")
     @ResponseBody
-    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") Long userId)
+    public Map<String, Boolean> deleteUser(@PathVariable(value = "id") long userId)
     throws ResourceAccessException {
         return userService.deleteUser(userId);
     }

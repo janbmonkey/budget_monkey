@@ -1,4 +1,4 @@
-package com.example.BM_Backend;
+package com.example.BM_Backend.Item;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +38,7 @@ public class ItemController {
     @ResponseStatus(HttpStatus.CREATED)
     @ResponseBody
     long postItem(@RequestBody ItemDto itemDto){
+        System.out.println(itemDto);
         ItemEntity itemEntity = this.convertToEntity(itemDto);
         System.out.println(itemEntity);
         return itemService.setItem(itemEntity);

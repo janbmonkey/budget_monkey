@@ -1,7 +1,7 @@
-import { API_URL } from './App';
-import { IUserType } from './App.types';
+import { API_URL } from '../App';
+import { IUserType } from '../App.types';
 
-export const getUser = async (id: number) => {
+export const getUser = async (id: string) => {
   const response = await fetch(`${API_URL}/user/${id}`);
   const body = await response.json();
   return body as IUserType;

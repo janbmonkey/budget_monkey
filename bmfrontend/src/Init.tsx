@@ -6,7 +6,7 @@ import {
   rsCurrentUserId,
   rsUserList,
 } from './App.recoil';
-import { getAllUsersAsRecord } from './UserService';
+import { getAllUsersAsRecord } from './Services/UserService';
 
 export const Init: FC = () => {
   const setCurrentUserId = useSetRecoilState(rsCurrentUserId);

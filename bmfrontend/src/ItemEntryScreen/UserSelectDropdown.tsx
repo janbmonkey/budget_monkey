@@ -9,7 +9,7 @@ import {
 import { useRecoilState } from 'recoil';
 import { rsUserList } from '../App.recoil';
 import { IUserType } from '../App.types';
-import { postUser } from '../UserService';
+import { postUser } from '../Services/UserService';
 import * as Icon from 'react-bootstrap-icons';
 import { UserSelectListItem } from './UserSelectListItem';
 
