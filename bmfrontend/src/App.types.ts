@@ -12,6 +12,6 @@ export interface IItemType {
   price: number;
   currency: string;
   quantity: number;
-  date: DateTime;
+  purchaseDate: DateTime;
   buyer: IUserType;
 }

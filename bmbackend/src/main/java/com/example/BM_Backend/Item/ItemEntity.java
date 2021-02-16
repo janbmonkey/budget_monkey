@@ -1,9 +1,11 @@
 package com.example.BM_Backend.Item;
 
 import com.example.BM_Backend.User.UserEntity;
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import javax.persistence.*;
+import java.util.Date;
 
 @Entity
 @Table(name = "ITEM_ENTITY")
@@ -27,10 +29,9 @@ public class ItemEntity {
     @Column(name = "QUANTITY")
     private int quantity;
 
-    //    @Temporal(TemporalType.DATE)
-//    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.TIMESTAMP)
     @Column(name = "PURCHASE_DATE")
-    private String date;
+    private Date purchaseDate;
 
     //@OnDelete(action = OnDeleteAction.CASCADE)
     @ManyToOne

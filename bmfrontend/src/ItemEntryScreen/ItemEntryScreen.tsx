@@ -32,7 +32,7 @@ export const ItemEntryScreen: FC = () => {
     price: {},
     currency: defaultCurrency,
     quantity: 1,
-    date: DateTime.local(),
+    purchaseDate: DateTime.local(),
     buyer: userList[currentUserId],
   } as IItemType);
 
@@ -81,7 +81,7 @@ export const ItemEntryScreen: FC = () => {
         price: {},
         currency: defaultCurrency,
         quantity: 1,
-        date: DateTime.local(),
+        purchaseDate: DateTime.local(),
         buyer: userList[currentUserId],
       } as IItemType);
       event.stopPropagation();
@@ -166,7 +166,7 @@ export const ItemEntryScreen: FC = () => {
               type="date"
               name="date"
               placeholder="Date"
-              value={item.date.toISODate()}
+              value={item.purchaseDate.toISODate()}
               onChange={handleItemEntryInputChange}
             />
           </InputGroup>
