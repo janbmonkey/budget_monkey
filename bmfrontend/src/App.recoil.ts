@@ -1,5 +1,10 @@
 import { atom } from 'recoil';
-import { IItemType, IUserType } from './App.types';
+import { IItemType, IUserType, NaviationType } from './App.types';
+
+export const rsNavigation = atom<NaviationType>({
+  key: 'rsNavigation',
+  default: NaviationType.ITEM_ENTRY,
+});
 
 export const rsDefaultCurrency = atom<string>({
   key: 'rsDefaultCurrency',

@@ -4,8 +4,10 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.ResourceAccessException;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -42,6 +44,13 @@ public class ItemController {
         ItemEntity itemEntity = this.convertToEntity(itemDto);
         System.out.println(itemEntity);
         return itemService.setItem(itemEntity);
+    }
+
+    @DeleteMapping(value ="/item/{id}")
+    @ResponseBody
+    public Map<String, Boolean> deleteItem(@PathVariable(value = "id") long itemId)
+            throws ResourceAccessException {
+        return itemService.deleteItem(itemId);
     }
 
 

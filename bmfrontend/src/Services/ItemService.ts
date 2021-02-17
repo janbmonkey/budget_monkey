@@ -22,14 +22,16 @@ export const getItem = async (id: string) => {
   return fromDto(body);
 };
 
-export const getAllItems = async () => {
+export const getAllItems = async (): Promise<IItemType[]> => {
   const response = await fetch(`${API_URL}/item`);
   const body = (await response.json()) as any[];
   console.trace('get all items', 'response', body);
   return body.map((itemDto) => fromDto(itemDto));
 };
 
-export const getAllItemsAsRecord = async () => {
+export const getAllItemsAsRecord = async (): Promise<
+  Record<string, IItemType>
+> => {
   const itemList = await getAllItems();
   const itemRecord: Record<string, IItemType> = {};
   itemList.forEach((item) => (itemRecord[item.id] = item));
@@ -37,7 +39,6 @@ export const getAllItemsAsRecord = async () => {
 };
 
 export const postItem = async (item: IItemType) => {
-  debugger;
   const postBody = JSON.stringify(toDto(item));
   const response = await fetch(`${API_URL}/item`, {
     method: 'POST',

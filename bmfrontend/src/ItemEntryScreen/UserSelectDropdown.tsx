@@ -57,6 +57,15 @@ export const UserSelectDropdown: FC<IUserSelectDropdownProps> = (props) => {
       });
     }
   }, [newUser, setUserList]);
+
+  const enterNewUser = useCallback(
+    (event: React.KeyboardEvent<HTMLInputElement>) => {
+      if (event.key === 'Enter') onCreateNewUser();
+      event.stopPropagation();
+    },
+    [onCreateNewUser]
+  );
+
   return (
     <DropdownButton
       title={activeUser ? activeUser.name : 'Who bought it?'}
@@ -82,9 +91,7 @@ export const UserSelectDropdown: FC<IUserSelectDropdownProps> = (props) => {
             placeholder="Name"
             value={newUser.name}
             onChange={onChangeNewUserInput}
-            onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) =>
-              event.key === 'Enter' && onCreateNewUser()
-            }
+            onKeyPress={enterNewUser}
           />
           <FormControl
             name="email"
@@ -92,9 +99,7 @@ export const UserSelectDropdown: FC<IUserSelectDropdownProps> = (props) => {
             placeholder="Email"
             value={newUser.email}
             onChange={onChangeNewUserInput}
-            onKeyPress={(event: React.KeyboardEvent<HTMLInputElement>) =>
-              event.key === 'Enter' && onCreateNewUser()
-            }
+            onKeyPress={enterNewUser}
           />
         </InputGroup>
         <Button className="btn-sm" onClick={onCreateNewUser}>
