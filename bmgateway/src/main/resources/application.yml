@@ -1,12 +1,12 @@
 server:
-  port: 9090
+  port: 9091
 ---
 spring:
   cloud:
     gateway:
       routes:
-        - id: my-first-route
+        - id: get
           uri: https://httpbin.org/get
           predicates:
             - Path=/get
-            - Header=AwesomePassword, soso1
+#            - Header=AwesomePassword, soso1
